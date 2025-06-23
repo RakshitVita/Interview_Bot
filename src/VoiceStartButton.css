@@ -1,0 +1,97 @@
+body {
+  margin: 0;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}.voice-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.voice-circle {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.voice-circle::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  z-index: 0;
+  background: conic-gradient(from 0deg, #3a1cdb 0%,
+    #00d4ff 25%,
+    #00ffb8 50%,
+    #3a1cdb 100%);
+  animation: rotate-gradient 6s linear infinite;
+}
+
+@keyframes rotate-gradient {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Ensure content is above the animated background */
+.voice-circle > * {
+  position: relative;
+  z-index: 1;
+}
+
+.voice-logo {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  object-fit: cover;
+  /* margin-bottom: 2px; */
+  margin: 45px auto 0 auto;
+
+}
+
+.start-button {
+  background: #3f00ff;
+  color: white;
+  padding: 12px 25px;
+  border-radius: 20px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  font-size: 17px;
+  box-shadow: 0 2px 8px rgba(91, 0, 255, 0.3);
+  margin-top: 10px; 
+}
+
+.start-button:hover {
+  background: #3e00b8;
+}
+
+.show-chat-button {
+  margin-top: 24px;
+  background: #192638;
+  color: white;
+  font-weight: 600;
+  padding: 15px 35px;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  font-size: 17px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+.show-chat-button:hover {
+  background-color: #2a66aa;
+}
