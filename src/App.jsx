@@ -1,30 +1,33 @@
 import { useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
 import './App.css'
-import ConvAiDOMComponent from './Components/ConvoAI/ConvAiDOMComponent'
-import { useConversationStore } from './stores/useChatStore'
 
 function App() {
-  const setMeta = useConversationStore((state) => state.setMeta);
-    useEffect(() => {
-    // Parse URL params once on mount
-    const params = new URLSearchParams(window.location.search);
-    const agentId = params.get("agent_id") || "";
-    const jobId = params.get("job_id") || "";
-    const candidateId = params.get("candidate_id") || "";
-
-    setMeta(agentId, jobId, candidateId);
-  }, [setMeta]);
+  const [count, setCount] = useState(0)
 
   return (
     <>
-       <div style={{ padding: 20, display: "flex", justifyContent: "center" }}>
-      <ConvAiDOMComponent
-        platform="web"
-        onMessage={(msg) => console.log("Message:", msg)}
-        onSubtitle={(subtitle) => console.log("Subtitle:", subtitle)}
-        onConversationId={(id) => console.log("Conversation ID:", id)}
-      />
-    </div>
+      <div>
+        <a href="https://vite.dev" target="_blank">
+          <img src={viteLogo} className="logo" alt="Vite logo" />
+        </a>
+        <a href="https://react.dev" target="_blank">
+          <img src={reactLogo} className="logo react" alt="React logo" />
+        </a>
+      </div>
+      <h1>Vite + React</h1>
+      <div className="card">
+        <button onClick={() => setCount((count) => count + 1)}>
+          count is {count}
+        </button>
+        <p>
+          Edit <code>src/App.jsx</code> and save to test HMR
+        </p>
+      </div>
+      <p className="read-the-docs">
+        Click on the Vite and React logos to learn more
+      </p>
     </>
   )
 }
