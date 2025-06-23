@@ -1,33 +1,46 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React,{useEffect,useState} from 'react'
+import Conversation from './components/11LabsConvo/Conversation';
+import './App.css';
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+
+  const [params, setParams] = useState({
+    job_id: null,
+    candidate_id: null,
+    agent_id: null
+  });
+
+    const [isValid, setIsValid] = useState(true);
+
+    useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+
+    const job_id = searchParams.get("job_id");
+    const candidate_id = searchParams.get("candidate_id");
+    const agent_id = searchParams.get("agent_id");
+
+    setParams({ job_id, candidate_id, agent_id });
+
+     if (job_id && candidate_id && agent_id) {
+      setParams({ job_id, candidate_id, agent_id });
+      setIsValid(true);
+    } else {
+      setIsValid(false);
+    };
+
+  }, []);
+
+    if (!isValid) {
+    return (
+      <div className="InvalidParams" >
+        🚫 Incorrect URL – Required parameters missing.
+      </div>
+    );
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Conversation  agent_id={params.agent_id} candidate_id={params.candidate_id} job_id={params.job_id}/>
     </>
   )
 }
