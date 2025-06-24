@@ -12,6 +12,7 @@ body {
   align-items: center;
   justify-content: center;
   height: 100vh;
+  position: relative; /* Added position relative */
 }
 
 .voice-circle {
@@ -95,3 +96,76 @@ body {
 .show-chat-button:hover {
   background-color: #2a66aa;
 }
+
+/* Ripple effect styles */
+.ripple-active::before,
+.ripple-active::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: calc(50% - 40px); /* Shift ripple up for bottom margin */
+  width: 300px;
+  height: 300px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.ripple-active::before {
+  background: radial-gradient(
+    rgba(91, 0, 255, 0.95) 0%,
+    rgba(91, 0, 255, 0.7) 50%,
+    rgba(91, 0, 255, 0.4) 80%,
+    transparent 100%
+  );
+  box-shadow: 0 0 40px 10px rgba(91, 0, 255, 0.3);
+  animation: ripple-pulse 1.2s infinite;
+}
+
+.ripple-active::after {
+  background: radial-gradient(
+    rgba(91, 0, 255, 0.7) 0%,
+    rgba(91, 0, 255, 0.4) 60%,
+    transparent 100%
+  );
+  box-shadow: 0 0 30px 5px rgba(91, 0, 255, 0.2);
+  animation: ripple-pulse 1.2s infinite 0.6s;
+}
+
+@keyframes ripple-pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  70% {
+    transform: translate(-50%, -50%) scale(1.35);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.7);
+    opacity: 0;
+  }
+}
+
+/* Make sure .voice-container is positioned relative */
+.voice-container {
+  position: relative;
+}
+
+/* Make sure content is above the ripple */
+.voice-container > * {
+  position: relative;
+  z-index: 3;
+}
+
+.end-button {
+  background: #e53935 !important; /* Red background */
+  color: #fff !important;         /* White text */
+}
+
+.end-button:hover {
+  background: #b71c1c !important; /* Darker red on hover */
+}
+
+

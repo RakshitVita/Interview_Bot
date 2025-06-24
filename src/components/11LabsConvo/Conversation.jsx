@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { useConversation } from '@11labs/react';
 import logo from "../../assets/logo.png";
 import "./Conversation.css"; // Import your styles
+import ChatWindow from '../ChatBox/ChatWindow';
 
 async function requestMicrophonePermission() {
     try {
@@ -17,6 +18,7 @@ const Conversation = ({ agent_id, candidate_id, job_id }) => {
     const [sessionId, setSessionId] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [subtitle, setSubtitle] = useState("");
+    const [showChat, setShowChat] = useState(false);
 
     const {
         startSession,
@@ -90,21 +92,26 @@ const Conversation = ({ agent_id, candidate_id, job_id }) => {
 
 
     return (
-        <div className="voice-container">
+        <div className={`voice-container${status === "connected" ? " ripple-active" : ""}`}>
             <div className="voice-circle">
                 <img src={logo} alt="logo" className="voice-logo" />
 
                 <button
-                    className="start-button"
+                    className={`start-button${status === "connected" ? " end-button" : ""}`}
                     onClick={status === "connected" ? handleStop : handleStart}
                     disabled={isLoading}
                 >
-                    {isLoading ? "⏳ Loading..." : status === "connected" ? "🔴 End" : "📞 Start"}
+                    {isLoading ? "⏳ Loading..." : status === "connected" ? "End" : "📞 Start"}
                 </button>
             </div>
-            <button className="show-chat-button" >
-                Show Chat
+            <button
+                className="show-chat-button"
+                onClick={() => setShowChat((prev) => !prev)}
+            >
+                {showChat ? "Hide Chat" : "Show Chat"}
             </button>
+
+            {showChat && <ChatWindow onClose={() => setShowChat(false)} />}
         </div>
     );
 };
