@@ -4,6 +4,7 @@ import logo from "../../assets/logo.png";
 import "./Conversation.css"; // Import your styles
 import ChatWindow from '../ChatBox/ChatWindow';
 
+
 async function requestMicrophonePermission() {
     try {
         await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -18,7 +19,21 @@ const Conversation = ({ agent_id, candidate_id, job_id }) => {
     const [sessionId, setSessionId] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [subtitle, setSubtitle] = useState("");
+
     const [showChat, setShowChat] = useState(false);
+
+    const [message, setMessages] = useState(
+        [
+                { source: "ai", message: "Hi there!" },
+                { source: "user", message: "Hello!" },
+                { source: "ai", message: "What's your name?" }
+            ]
+    );
+   
+
+
+
+
 
     const {
         startSession,
@@ -31,6 +46,7 @@ const Conversation = ({ agent_id, candidate_id, job_id }) => {
         onMessage: (msg) => {
             console.log("AI said:", msg);
             setSubtitle(msg.text || "");
+            setMessages(prev => [...prev, msg]);
         },
         onError: (err) => console.error("11labs Error", err)
     });
@@ -97,7 +113,10 @@ const Conversation = ({ agent_id, candidate_id, job_id }) => {
                 <img src={logo} alt="logo" className="voice-logo" />
 
                 <button
-                    className={`start-button${status === "connected" ? " end-button" : ""}`}
+
+                    className="start-button"
+
+
                     onClick={status === "connected" ? handleStop : handleStart}
                     disabled={isLoading}
                 >
@@ -106,36 +125,20 @@ const Conversation = ({ agent_id, candidate_id, job_id }) => {
             </div>
             <button
                 className="show-chat-button"
+
                 onClick={() => setShowChat((prev) => !prev)}
             >
                 {showChat ? "Hide Chat" : "Show Chat"}
             </button>
 
             {showChat && <ChatWindow onClose={() => setShowChat(false)} />}
+
         </div>
     );
 };
 
+// onClick={() => setShowChat(prev => !prev)}
+// {showChat && <Demo messages={message} />}
 
-const styles = {
-    container: {
-        textAlign: "center",
-        marginTop: "5rem",
-        fontFamily: "sans-serif"
-    },
-    subtitle: {
-        margin: "1rem 0",
-        fontSize: "1.2rem",
-        color: "#333"
-    },
-    button: {
-        padding: "0.8rem 1.5rem",
-        fontSize: "1rem",
-        color: "#fff",
-        border: "none",
-        borderRadius: "8px",
-        cursor: "pointer"
-    }
-};
 
 export default Conversation
