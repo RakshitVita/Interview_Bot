@@ -30,11 +30,6 @@ const Conversation = ({ agent_id, candidate_id, job_id }) => {
             ]
     );
    
-
-
-
-
-
     const {
         startSession,
         endSession,
@@ -131,13 +126,13 @@ const Conversation = ({ agent_id, candidate_id, job_id }) => {
                 {showChat ? "Hide Chat" : "Show Chat"}
             </button>
 
-            {showChat && <ChatWindow onClose={() => setShowChat(false)} />}
+            {showChat && <ChatWindow messages={message} onClose={() => setShowChat(false)} />}
 
         </div>
     );
 };
 
-// onClick={() => setShowChat(prev => !prev)}
+
 // {showChat && <Demo messages={message} />}
 
 
