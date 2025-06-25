@@ -1,13 +1,30 @@
-import React from "react";
-//import "./ChatWindow.css"; // Import your styles
+import React from 'react'
+import { Download, User, Bot } from "lucide-react";
 import "./ChatWindow.css"; // Import your styles
-import { Bot, User,Download } from "lucide-react";
 
-const ChatWindow = ({ onClose, messages }) => (
-  <div className="chat-window">
+const ChatWindow = ({onClose,messages}) => {
+const downloadChatAsText = () => {
+  const textContent = messages
+    .map(msg => `${msg.source.toUpperCase()}: ${msg.message}`)
+    .join("\n");
+
+  const blob = new Blob([textContent], { type: "text/plain" });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "chat-history.txt";
+  link.click();
+
+  URL.revokeObjectURL(url);
+};
+
+
+  return (
+<div className="chat-window">
     <div className="chat-window-header">
 
-        <button className="chat-window-download" title="Download">
+        <button className="chat-window-download" title="Download" onClick={downloadChatAsText}>
         <Download size={20} />
 
       </button>
@@ -64,6 +81,7 @@ const ChatWindow = ({ onClose, messages }) => (
       <span className="chat-timer">0:00 / 0:00</span>
     </div>
   </div>
-);
+  )
+}
 
-export default ChatWindow;
+export default ChatWindow
