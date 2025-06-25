@@ -1,13 +1,13 @@
 import React from "react";
 //import "./ChatWindow.css"; // Import your styles
 import "./ChatWindow.css"; // Import your styles
-import { Bot } from "lucide-react";
+import { Bot,Download } from "lucide-react";
 
 const ChatWindow = ({ onClose }) => (
   <div className="chat-window">
     <div className="chat-window-header">
         <button className="chat-window-download" title="Download">
-        ⬇️
+        <Download size={20} />
       </button>
       {/*<span>Chat</span>*/}
       <button className="chat-window-close" onClick={onClose}>×</button>
