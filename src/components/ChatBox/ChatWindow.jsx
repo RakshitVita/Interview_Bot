@@ -1,5 +1,5 @@
 import React from 'react'
-import { Download, User, Bot,AudioLines } from "lucide-react";
+import { Download, User, Bot,AudioLines,Pause } from "lucide-react";
 import "./ChatWindow.css"; // Import your styles
 import { useState, useRef } from 'react';
 
@@ -20,7 +20,7 @@ const downloadChatAsText = () => {
   URL.revokeObjectURL(url);
 };
 
-const API_AUDIO_URL = "https://vitascout-nginx.eastus.cloudapp.azure.com/api/vitascout/default/get-conversation-audio";
+const API_AUDIO_URL = "https://vita-interview-bot.genaidemo.live/api/vitascout/default/get-conversation-audio";
 
 
   //Handling Audio 
@@ -37,11 +37,18 @@ const API_AUDIO_URL = "https://vitascout-nginx.eastus.cloudapp.azure.com/api/vit
     }
 
     try {
-      const response = await fetch(API_AUDIO_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ conversation_id: conversationId }),
-      });
+      // const response = await fetch(API_AUDIO_URL, {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ conversation_id: conversationId }),
+      // });
+      const payload = { conversation_id: conversationId };
+                    const response = await fetch(API_AUDIO_URL, {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify(payload),
+                    });
+
 
       if (!response.ok) throw new Error("Failed to fetch audio");
 
@@ -123,12 +130,14 @@ const API_AUDIO_URL = "https://vitascout-nginx.eastus.cloudapp.azure.com/api/vit
       <button className="chat-audio-btn" onClick={fetchAudio}>
           <AudioLines color="#fff" />
       </button>
-      <button className="chat-send-btn" >
-        <span role="img" aria-label="send">
-          ▶️
-        </span>
-      </button>
-      <div className="chat-progress-bar" onClick={togglePlayPause}>
+<button className="chat-send-btn" onClick={togglePlayPause}>
+  {audioPlaying ? (
+    <Pause size={28} />
+  ) : (
+    <span role="img" aria-label="play">▶️</span>
+  )}
+</button>
+      <div className="chat-progress-bar" >
           <div
             className="chat-progress-bar-inner"
             style={{ width: audioDuration ? `${(audioCurrent / audioDuration) * 100}%` : "0%" }}
@@ -138,7 +147,20 @@ const API_AUDIO_URL = "https://vitascout-nginx.eastus.cloudapp.azure.com/api/vit
           {formatTime(audioCurrent)} / {formatTime(audioDuration)}
         </span>
       </div>
-    </div>
+    
+    {audioUrl && (
+  <audio
+    ref={audioRef}
+    src={audioUrl}
+    autoPlay={audioPlaying}
+    onTimeUpdate={() => setAudioCurrent(audioRef.current.currentTime)}
+    onLoadedMetadata={() => setAudioDuration(audioRef.current.duration)}
+    onEnded={() => setAudioPlaying(false)}
+    style={{ display: "none" }} // Hide default controls if you want a custom UI
+  />
+)}
+
+</div>
   )
 }
 

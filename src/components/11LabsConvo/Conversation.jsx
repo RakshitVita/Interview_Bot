@@ -84,7 +84,7 @@ const Conversation = ({ agent_id, candidate_id, job_id }) => {
                 job_id: job_id ? parseInt(job_id, 10) : undefined,
             };
 
-            await fetch("https://vitascout-nginx.eastus.cloudapp.azure.com/api/vitascout/default/check-conversation", {
+            await fetch("https://vita-interview-bot.genaidemo.live/api/vitascout/default/check-conversation", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload),
