@@ -103,7 +103,7 @@ const Conversation = ({ agent_id, candidate_id, job_id }) => {
 
                 <button
 
-                    className="start-button"
+                    className={`start-button${status === "connected" ? " end-button" : ""}`}
 
 
                     onClick={status === "connected" ? handleStop : handleStart}

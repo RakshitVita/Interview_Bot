@@ -121,18 +121,24 @@ const API_AUDIO_URL = "https://vitascout-nginx.eastus.cloudapp.azure.com/api/vit
     </div>
     <div className="chat-window-footer">
       <button className="chat-audio-btn" onClick={fetchAudio}>
-          <AudioLines size={23} color="#fff" />
+          <AudioLines color="#fff" />
       </button>
-      <input className="chat-input" placeholder="Type your message..." disabled />
-      <button className="chat-send-btn" disabled>
-        
+      <button className="chat-send-btn" >
         <span role="img" aria-label="send">
           ▶️
         </span>
       </button>
-      <span className="chat-timer">0:00 / 0:00</span>
+      <div className="chat-progress-bar" onClick={togglePlayPause}>
+          <div
+            className="chat-progress-bar-inner"
+            style={{ width: audioDuration ? `${(audioCurrent / audioDuration) * 100}%` : "0%" }}
+          />
+        </div>
+        <span className="chat-timer">
+          {formatTime(audioCurrent)} / {formatTime(audioDuration)}
+        </span>
+      </div>
     </div>
-  </div>
   )
 }
 
