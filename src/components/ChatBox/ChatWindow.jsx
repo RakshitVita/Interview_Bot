@@ -1,8 +1,9 @@
 import React from 'react'
-import { Download, User, Bot } from "lucide-react";
+import { Download, User, Bot,AudioLines } from "lucide-react";
 import "./ChatWindow.css"; // Import your styles
+import { useState, useRef } from 'react';
 
-const ChatWindow = ({onClose,messages}) => {
+const ChatWindow = ({onClose,messages,conversationId}) => {
 const downloadChatAsText = () => {
   const textContent = messages
     .map(msg => `${msg.source.toUpperCase()}: ${msg.message}`)
@@ -18,6 +19,58 @@ const downloadChatAsText = () => {
 
   URL.revokeObjectURL(url);
 };
+
+const API_AUDIO_URL = "https://vitascout-nginx.eastus.cloudapp.azure.com/api/vitascout/default/get-conversation-audio";
+
+
+  //Handling Audio 
+  const [audioUrl, setAudioUrl] = useState(null);
+  const [audioPlaying, setAudioPlaying] = useState(false);
+  const [audioCurrent, setAudioCurrent] = useState(0);
+  const [audioDuration, setAudioDuration] = useState(0);
+  const audioRef = useRef(null);
+
+  const fetchAudio = async () => {
+    if (!conversationId) {
+      alert("No conversation ID");
+      return;
+    }
+
+    try {
+      const response = await fetch(API_AUDIO_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ conversation_id: conversationId }),
+      });
+
+      if (!response.ok) throw new Error("Failed to fetch audio");
+
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      setAudioUrl(url);
+      setAudioPlaying(true);
+    } catch (err) {
+      console.error(err);
+      alert("Error fetching audio");
+    }
+  };
+
+  const togglePlayPause = () => {
+    if (!audioRef.current) return;
+    if (audioRef.current.paused) {
+      audioRef.current.play();
+      setAudioPlaying(true);
+    } else {
+      audioRef.current.pause();
+      setAudioPlaying(false);
+    }
+  };
+
+  const formatTime = (secs) => {
+    const minutes = Math.floor(secs / 60);
+    const seconds = Math.floor(secs % 60);
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  };
 
 
   return (
@@ -41,7 +94,7 @@ const downloadChatAsText = () => {
             Hi, I am your Interviewer Bot. Let's start your interview.
           </span>
         </div> */}
-        {messages.map((msg, index) => (
+        {messages && messages.map((msg, index) => (
           <div
           className="chat-message bot"
             key={index}
@@ -67,13 +120,12 @@ const downloadChatAsText = () => {
       </div>
     </div>
     <div className="chat-window-footer">
-      <button className="chat-audio-btn" disabled>
-        <span role="img" aria-label="audio">
-          🎤
-        </span>
+      <button className="chat-audio-btn" onClick={fetchAudio}>
+          <AudioLines size={23} color="#fff" />
       </button>
       <input className="chat-input" placeholder="Type your message..." disabled />
       <button className="chat-send-btn" disabled>
+        
         <span role="img" aria-label="send">
           ▶️
         </span>

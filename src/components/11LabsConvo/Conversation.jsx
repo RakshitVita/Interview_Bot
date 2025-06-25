@@ -22,13 +22,7 @@ const Conversation = ({ agent_id, candidate_id, job_id }) => {
 
     const [showChat, setShowChat] = useState(false);
 
-    const [message, setMessages] = useState(
-        [
-                { source: "ai", message: "Hi there!" },
-                { source: "user", message: "Hello!" },
-                { source: "ai", message: "What's your name?" }
-            ]
-    );
+    const [message, setMessages] = useState([]);
    
     const {
         startSession,
@@ -126,7 +120,7 @@ const Conversation = ({ agent_id, candidate_id, job_id }) => {
                 {showChat ? "Hide Chat" : "Show Chat"}
             </button>
 
-            {showChat && <ChatWindow messages={message} onClose={() => setShowChat(false)} />}
+            {showChat && <ChatWindow messages={message} onClose={() => setShowChat(false)} conversationId={sessionId}/>}
 
         </div>
     );
